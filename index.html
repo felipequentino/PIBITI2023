@@ -7,7 +7,6 @@
   <!--jquery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
-  
 <!-- materialize js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -19,7 +18,6 @@
       draggable: true,
       preventScrolling: false
     });
-    
   });
 </script>
 
@@ -46,17 +44,19 @@
    <!-- top nav -->
    <nav class="z-depth-0">
     <div class="nav-wrapper container">
-      <a href="/">Crimes <span>Ambientais</span></a>
+      <a href="/">Foju - <span>Crimes Ambientais</span></a>
       <span class="right grey-text text-darken-1">
         <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
       </span>
     </div>
   </nav>
 
+
   <!-- side nav -->
   <ul id="side-menu" class="sidenav side-menu right-aligned">
     <li><a class="subheader">CRIMESAMBIENTAIS</a></li>
     <li><a href="/" class="waves-effect">Mapa</a></li>
+    <li><a href="/pages/upload.html" class="waves-effect">Enviar Imagem</a></li>
     <li><a href="/pages/about.html" class="waves-effect">Sobre</a></li>
     <li><div class="divider"></div></li>
     <li><a href="/pages/contact.html" class="waves-effect">
@@ -72,7 +72,7 @@
       <h4>Selecione um crime ambiental</h4>
       <div class="input-field">
         <select id="crime-select">
-          <option value="" disabled selected>Escolha um crime</option>
+          <option value="" disabled selected>Selecione o crime que aconteceu</option>
           <option value="Desmatamento">Desmatamento</option>
           <option value="Queimada">Queimada</option>
           <option value="MausTratos">Maus Tratos</option>
@@ -83,10 +83,40 @@
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="add-marker-btn-dialog">Adicionar marcador</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="add-marker-btn-dialog">Inserir foto</a>
     </div>
   </div>
   
+   <!-- Segunda caixa modal para inserção de fotos -->
+<div id="photo-dialog" class="modal">
+  <div class="modal-content">
+    <h4>Você tem a foto do crime?</h4>
+    <div class="input-field">
+      <p>
+        <label>
+          <input name="photo-option" type="radio" id="yes-photo" />
+          <span>Sim (inserir foto)</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="photo-option" type="radio" id="no-photo" />
+          <span>Não tenho a foto</span>
+        </label>
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="confirm-photo">Confirmar</a>
+  </div>
+</div>
+
+<form id="image-form">
+  <input type="file" id="mediaCapture" />
+  <input id="submitImage"></input>
+</form>
+
   
   <script type="module" src="js/firestore.js"></script>
   <script src="/js/materialize.min.js"></script>
