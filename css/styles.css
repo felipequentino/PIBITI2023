@@ -1,1 +1,100 @@
-#map { height: 480px; }
+#map { height: 690px; }
+
+.modal {
+    width: 30%;
+    height: 40%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+  
+@media only screen and (max-width: 992px) {
+    .modal {
+        width: 90%;
+        height: 65%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .modal {
+        width: 80%;
+        height: 70%;
+        margin: 5% auto;  
+    }
+}
+@media only screen and (max-width: 412px) {
+  #map { height: 750px; }
+
+}
+@media only screen and (max-width: 428px) {
+  #map { height: 755px; }
+
+}
+
+
+#add-marker-btn {
+    font-size: 9px; 
+    padding: 9px 9px; 
+    line-height: 14px;
+    width: 129px;
+    height: 30px;
+    color: black;
+  }
+
+.custom-modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap; 
+}
+
+.custom-modal-footer a:nth-child(1) {
+    order: 1;
+    color: crimson;
+}
+
+.custom-modal-footer a:nth-child(2) {
+    order: 2;
+    color: #000000;
+}
+
+.custom-modal-footer a:nth-child(3) {
+    order: 3; 
+    color: #000000;
+    width: 100%; 
+}
+
+.custom-btn {
+    flex-shrink: 0;
+    font-size: 0.8em; 
+  }
+  
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    background-color: #f68f8f;
+    height: 115px;
+    line-height: 75px;
+  }
+  
+  .bottom-nav ul li {
+    display: inline-block;
+    padding: 0 20px;
+  }
+  
+  .bottom-nav ul li a {
+    color: #333;
+    font-weight: bold;
+  }
+
+  .select-wrapper input.select-dropdown {
+    border-bottom: none !important;
+  }
+
+  .truncate {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
