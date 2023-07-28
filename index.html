@@ -1,127 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!--jquery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
-<!-- materialize js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems, {
-      edge: 'right',
-      draggable: true,
-      preventScrolling: false
-    });
-  });
-</script>
-
-  <!-- materialize icons, css & js -->
-  <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
+  <!-- Materialize CSS -->
+  <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" href="/css/styles.css" rel="stylesheet">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-  integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-  crossorigin=""/>
-   <!-- Make sure you put this AFTER Leaflet's CSS -->
- <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
- integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
- crossorigin=""></script>
- 
-  <!-- ios support-->
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+  <!-- Custom CSS -->
+  <link type="text/css" href="/css/styles.css" rel="stylesheet">
+
+  <!-- Materialize JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+  <!-- ios support -->
   <link rel="apple-touch-icon" href="/icons/icon-96x96.png">
   <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+  
   <title>Crimes Ambientais</title>
+</head>
 
-   <!-- top nav -->
-   <nav class="z-depth-0">
+<body>
+  <!-- Top Navigation -->
+  <nav class="z-depth-0">
     <div class="nav-wrapper container">
-      <a href="/">Foju - <span>Crimes Ambientais</span></a>
+      <a href="/">Crimes <span>Ambientais</span></a>
+      <a href="#" id="add-marker-btn" class="btn-small white">Adicionar Marcador</a>
       <span class="right grey-text text-darken-1">
         <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
       </span>
     </div>
   </nav>
 
+  <!-- Bottom Navigation -->
+  <nav class="z-depth-0 bottom-nav">
+    <div class="nav-wrapper container">
+      <ul class="center">
+        <div class="input-field col s12 left-align">
+          <select id="crimes-select">
+            <option value="" disabled selected>Escolha um crime</option>
+            <option value="Maus Tratos aos animais">Maus Tratos a Animais</option>
+            <option value="Provocar incêndio em floresta">Provocar incêndio em Floresta</option>
+            <option value="Desmatar floresta, plantada ou nativa, em terras de domínio público ou devolutas">Desmatar floresta, plantada ou nativa, em terras de domínio público ou devolutas</option>
+            <option value="Cortar árvore em floresta considerada de preservação permanente">Cortar Árvore em Floresta de preservação Permanente</option>
+            <option value="Causar Poluição resultante a danos a saúde humana">Causar Poluição Resultante em danos à Saúde Humana</option>
+            <option value="Pichar ou conspurcar edificação ou monumento urbano">Pichação em edificação/monumento urbano</option>
+            <option value="Comercialização e tráfico de animais">Comercialização e tráfico de Animais</option>
+            <option value="Matar, perseguir, caçar, apanhar, utilizar espécimes da fauna">Matar, perseguir, caçar, apanhar, utilizar espécimes da fauna</option>
+            <option value="Pesca Proibida">Pesca Proibida</option>
+            <option value="Produzir e/ou manter substância tóxica, perigosa ao meio ambiente">Produzir ou Manter substância tóxica perigosa ao meio ambiente</option>
+            <option value="Causar Danos à Unidade de Conservação através de atividade que afete a biota">Causar Danos à Unidade de Conservação através de atividade que afete a biota</option>
+            <option value="Destruir ou danificar vegetação primária">Destruir ou danificar vegetação primária</option>
+            <option value="Destruir florestas nativas de vegetação fixadora de dunas, mangues, objeto de preservação">Destruir florestas nativas de vegetação fixadora de dunas, mangues, objeto de preservação</option>
+            <option value="Destruir plantas de ornamentação de logradouros públicos ou em propriedade privada alheia">Destruir plantas de ornamentação de logradouros públicos ou em propriedade privada alheia</option>
+            <option value="Destruir plantas de ornamentação de logradouros públicos - Modalidade culposa">Destruir plantas de ornamentação de logradouros públicos - Modalidade culposa</option>
+            <option value="Construção de estabelecimentos potencialmente poluidores, sem licença">Construção de estabelecimentos potencialmente poluidores, sem licença</option>
+            <option value="Elaborar relatório ambiental falso ou enganoso, inclusive por omissão">Elaborar relatório ambiental falso ou enganoso, inclusive por omissão</option>
+          </select>
+        </div>
+        <div class="input-field col s12 right-align">
+          <select id="anos-select">
+            <option value="" disabled selected>Escolha os anos</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="total">Todas as ocorrências</option>
+          </select>
+        </div>
+      </ul>
+    </div>
+  </nav>
 
-  <!-- side nav -->
+  <!-- Side Navigation -->
   <ul id="side-menu" class="sidenav side-menu right-aligned">
     <li><a class="subheader">CRIMESAMBIENTAIS</a></li>
     <li><a href="/" class="waves-effect">Mapa</a></li>
     <li><a href="/pages/about.html" class="waves-effect">Sobre</a></li>
-    <li><div class="divider"></div></li>
+    <li>
+      <div class="divider"></div>
+    </li>
     <li><a href="/pages/contact.html" class="waves-effect">
-      <i class="material-icons">mail_outline</i>Contato</a>
+        <i class="material-icons">mail_outline</i>Contato</a>
     </li>
   </ul>
-</head>
-<body>
+
   <div id="map"></div>
-  <!-- caixa modal-->
-  <div id="crime-dialog" class="modal">
+
+  <!-- Option dialog -->
+  <div id="option-dialog" class="modal">
+    <div class="modal-content">
+      <h4>Selecione a opção</h4>
+      <p>Escolha como você gostaria de adicionar o marcador.</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" id="add-real-location-marker-btn"
+        class="modal-close waves-effect waves-green btn-flat">Adicionar Marcador na Sua Localização Real</a>
+      <a href="#!" id="add-clicked-location-marker-btn"
+        class="modal-close waves-effect waves-green btn-flat">Adicionar Marcador Clicando no Mapa</a>
+    </div>
+  </div>
+
+  <!-- Crime Dialog Modal -->
+  <div id="crime-dialog" class="modal modal-fixed-footer">
     <div class="modal-content">
       <h4>Selecione um crime ambiental</h4>
       <div class="input-field">
         <select id="crime-select">
-          <option value="" disabled selected>Selecione o crime que aconteceu</option>
-          <option value="Desmatamento">Desmatamento</option>
-          <option value="Queimada">Queimada</option>
-          <option value="MausTratos">Maus Tratos</option>
-          <option value="Poluicao">Poluição</option>
+          <option value="" disabled selected>Escolha um crime</option>
+          <option value="Desmatamento">Desmatamento de florestas em domínio público</option>
+          <option value="CortarArvorePermanente">Cortar Árvore em Floresta de preservação Permanente</option>
+          <option value="Incendio">Provocação de Incêndio em Floresta</option>
+          <option value="MausTratos">Maus Tratos a Animais</option>
+          <option value="Poluicao">Causar Poluição Resultante em danos à Saúde Humana</option>
+          <option value="Pichacao">Pichação em edificação/monumento urbano</option>
+          <option value="traficoAnimais">Comercialização e tráfico de Animais</option>
+          <option value="ProduzirManterSubstanciaToxica">Produzir ou Manter substância tóxica perigosa ao meio
+            ambiente</option>
+          <option value="PescaProibida">Pesca Proibida</option>
         </select>
         <label>Crimes</label>
       </div>
     </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="add-marker-btn-dialog">Inserir foto</a>
+    <div class="modal-footer custom-modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat custom-btn">Cancelar</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat custom-btn" id="add-marker-btn-dialog">Adicionar
+        marcador</a>
+      <a href="#!" id="show-specific-crimes" class="waves-effect waves-green btn-flat custom-btn">Mostrar Crimes mais
+        específicos</a>
     </div>
   </div>
-  
-   <!-- Segunda caixa modal para inserção de fotos -->
-<div id="photo-dialog" class="modal">
-  <div class="modal-content">
-    <h4>Você tem a foto do crime?</h4>
-    <div class="input-field">
-      <p>
-        <label>
-          <input name="photo-option" type="radio" id="yes-photo" />
-          <span>Sim (inserir foto)</span>
-        </label>
-      </p>
-      <p>
-        <label>
-          <input name="photo-option" type="radio" id="no-photo" />
-          <span>Não tenho a foto</span>
-        </label>
-      </p>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="confirm-photo">Confirmar</a>
-  </div>
-</div>
 
-<form id="image-form">
-  <input type="file" id="mediaCapture" />
-  <input id="submitImage"></input>
-</form>
-
-  
-  <script type="module" src="js/firestore.js"></script>
-  <script src="/js/materialize.min.js"></script>
+  <!-- JavaScript Files -->
+  <script src="/js/firestore.js" type="module"></script>
   <script src="/js/leaflet-heat.js"></script>
-  <script src="/js/leaflet.js"></script>
+  <script src="/js/map.js"></script>
   <script src="/js/app.js"></script>
-  
+
+  <script>
+    $(document).ready(function () {
+      // Original options
+      var originalOptions = {};
+      $('#crime-select option').each(function () {
+        originalOptions[$(this).val()] = $(this).text();
+      });
+      $('#show-specific-crimes').click(function () {
+        var buttonText = $(this).text();
+        $('#crime-select').empty();
+
+        if (buttonText === 'Mostrar crimes mais específicos') {
+          $(this).text('Mostrar crimes normais');
+
+          var specificCrimes = {
+            "matarPerseguirCacarApanharUtilizarEspecimesDaFauna": "Matar, perseguir, caçar, apanhar, utilizar espécimes da fauna silvestre",
+            "destruirOuDanificarVegetacaoPrimaria": "Destruir ou danificar vegetação primária",
+            "destruirPlantasPublicas": "Destruir Plantas de Ornamentação de Logradouros Públicos",
+            "lavraDeRecursosMinerais": "Executar lavra de Recursos Minerais sem Autorização",
+            "danosAconservacaoAtravesDeAtividadeQueAfetaAbiota": "Danos a Conservação através de atividade que afeta a biota",
+            "ConstrucaoDeEstabelecimentosPotencialmentePoluidoresSemLicenca": "Construção de Estabelecimentos Potencialmente Poluidores sem Licença",
+            "destuirFlorestasNativasDeVegetacaoFixadora": "Destruir Florestas Nativas de Vegetação Fixadora de Dunas, Mangues ou de preservação",
+            "abandonarSubstanciaToxica": "Abandonar Substância Tóxica, Perigosa ao Meio Ambiente",
+          };
+
+          $.each(specificCrimes, function (key, value) {
+            $('#crime-select')
+              .append($("<option></option>")
+                .attr("value", key)
+                .text(value));
+          });
+        } else {
+          $(this).text('Mostrar crimes mais específicos');
+
+          $.each(originalOptions, function (key, value) {
+            $('#crime-select')
+              .append($("<option></option>")
+                .attr("value", key)
+                .text(value));
+          });
+        }
+
+        $('#crime-select').formSelect();
+      });
+      $(document).ready(function () {
+        $('.tooltipped').tooltip();
+      });
+    });
+  </script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, {
+          edge: 'right',
+          draggable: true,
+          preventScrolling: false
+        });
+      });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems, {});
+      var options = document.querySelectorAll('#crimes-select option, #anos option');
+      options.forEach(function(option) {
+      option.classList.add('truncate');
+      });
+    });
+  </script>
 </body>
+
 </html>
