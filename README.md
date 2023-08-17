@@ -1,10 +1,10 @@
-# Foju
+# MinhaAju - Crimes Ambientais (MACA)
 Repositório oficial da aplicação Foju.
 
 Essa aplicação é resultado de um projeto PIBITI, orientado pelo Prof. Dr. Hendrik T. Macedo e executado pelo discente João F. Quentino. Ambos da Universidade Federal de Sergipe (UFS)
 Você pode acessá-la aqui: https://felipequentino.github.io/
 
-## O que é o Foju?
+## O que é o MACA?
 Trata-se de um Progressive Web App Crowdsourcing, onde permite a interação do usuário com o mapa da cidade de Aracaju - SE, e exibe marcadores personalizados de crimes ambientais (desmatamento, queimadas, maus tratos aos animais, poluição, etc) na localização enviada pelo usuário, além do aplicativo possuir um mapa de calor com dados estatísticos acerca dos crimes ambientais ocorridos em Aracaju em 2022 - 2023 (em desenvolvimento).
 
 
@@ -18,7 +18,7 @@ Este projeto pretende explorar o uso de mapas para produzir um feedback visual a
 
 ## Aspectos técnicos:
 - Página principal: HTML, CSS, javascript e materialize;
-- Dados:
+- Dados dos crimes: Providenciado pela Delegacia Especializada em Proteção aos Animais e ao Meio Ambiente (DEPAMA)
 - Banco de dados: Firebase Firestore
 - Biblioteca usada para gerar o mapa: [Leaflet](https://leafletjs.com/) e [OpenStreetMap](https://www.openstreetmap.org/);
 - Plugins usados: [leaflet-heat](https://github.com/Leaflet/Leaflet.heat)
