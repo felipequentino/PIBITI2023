@@ -7,10 +7,6 @@ Você pode acessá-la aqui: https://felipequentino.github.io/
 ## O que é o MACA?
 Trata-se de um Progressive Web App Crowdsourcing, onde permite a interação do usuário com o mapa da cidade de Aracaju - SE, e exibe marcadores personalizados de crimes ambientais (desmatamento, queimadas, maus tratos aos animais, poluição, etc) na localização enviada pelo usuário, além do aplicativo possuir um mapa de calor com dados estatísticos acerca dos crimes ambientais ocorridos em Aracaju em 2022 - 2023 (em desenvolvimento).
 
-```{py}
-print('teste')
-```
-
 
 ## Caracterização e justificativa
 Mesmo com todo o potencial tecnológico atual, a cultura de exploração e degradação dos recursos naturais promovida nas sociedades antigas ainda persiste. Com isso, a necessidade de mecanismos que auxiliem no combate contra essas atividades aumenta a cada ano, tendo em vista que a possibilidade de um colapso ambiental mundial se torna maior com o passar do tempo. 
