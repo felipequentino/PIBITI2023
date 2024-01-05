@@ -23,150 +23,174 @@ const app = initializeApp(firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
-let downloadURL;
-// realiza uma consulta no firestore e retorna todos os documentos da coleção "teste"
-const querySnapshot = await getDocs(collection(db, "teste"));
+var latitude;
+var longitude;
 
-// percorre os documentos retornados e adiciona um marcador no mapa para cada um
+navigator.geolocation.getCurrentPosition(function(position) {
+    // A posição atual do usuário está disponível em position.coords.latitude e position.coords.longitude
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+  
 
-querySnapshot.forEach((doc) => {
-  const data = doc.data();
-  if (data.lat && data.lng) {
-    const coords = new L.LatLng(data.lat, data.lng);
-    let iconName;
-
-    // define o ícone de acordo com o crime
-    if (data.id.includes('MausTratos')) {
-      iconName = 'maustratos.png';
-      
-    } else if (data.id.includes('Poluicao')) {
-      iconName = 'poluicao.png';
-      
-    } else if (data.id.includes('Desmatamento')) {
-      iconName = 'desmatamento.png';
-      
-    } else {
-      iconName = 'queimada.png';
-    }
-
-    const icon = L.icon({
-      iconUrl: `../img/${iconName}`,
-      iconSize: [38, 95],
-      iconAnchor: [22, 94],
-      popupAnchor: [-3, -76]
-    });
-    
-    // adiciona o marcador no mapa e a imagem, caso exista
-    const marker = L.marker(coords, { icon }).addTo(map);
-    if (data.urlStorage == '') {
-      marker.bindPopup("Sem imagem");
-    } else {
-    marker.bindPopup(`<img src="${data.urlStorage}" height="150px" width="150px"/>`);
-    }
+  console.log(latitude, longitude)
+  // Sucesso
+}, function(error) {
+  // Erro
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      // Permissão negada pelo usuário
+      break;
+    case error.POSITION_UNAVAILABLE:
+      // Posição indisponível
+      break;
+    case error.TIMEOUT:
+      // Tempo limite expirado
+      break;
+    case error.UNKNOWN_ERROR:
+      // Erro desconhecido
+      break;
   }
 });
 
-// função para salvar a imagem no storage - Firebase código
-async function saveImage(file) {
-  try {
-    // 1 - Upload the image to Cloud Storage.
-    const storage = getStorage();
-    const filePath = `imagens/${file.name}`;
-    const storageRef = ref(storage, filePath);
-    await uploadBytesResumable(storageRef, file);
 
-    // 2 - Generate a public URL for the file.
-    downloadURL = await getDownloadURL(storageRef);
-    console.log("File uploaded to Firebase Storage. Download URL:", downloadURL);
-  } catch (error) {
-    console.error('There was an error uploading a file to Firebase Storage:', error);
-  }
-}
+$('#add-marker-btn').click(function () {
+  $('#option-dialog').modal().modal('open');
+});
 
-// Triggered when a file is selected via the media picker.
-function onMediaFileSelected(event) {
-  event.preventDefault();
-  var file = event.target.files[0];
+$('#add-real-location-marker-btn').click(function () {
+  $('#crime-dialog').modal({
+    onOpenEnd: function () {
+      // Initialize the select box
+      $('select').formSelect();
 
-  // Clear the selection in the file picker input.
-  imageFormElement.reset();
+      // Remove the previous click event before adding a new one
+      $('#add-marker-btn-dialog').off('click').on('click', function () {
+        // Generate a unique ID with the current date and time for the document
+        var now = new Date();
+        var id = $('#crime-select').val() + '-' + now.toISOString();
 
-  // Check if the file is an image.
-  if (!file.type.match('image.*')) {
-    var data = {
-      message: 'You can only share images',
-      timeout: 2000
-    };
-    signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
-    return;
-  }
-  saveImage(file);
-}
+        // Add the coordinates and ID to Firestore
+        addDoc(collection(db, "teste"), {
+            id: id,
+            lat: latitude,
+            lng: longitude,
+            crime: $('#crime-select').val()
+          })
+          .then((docRef) => {
+            console.log("Coordinates added successfully:", docRef.id);
+          })
+          .catch((error) => {
+            console.error("Error adding coordinates:", error);
+          });
 
-map.on('click', function(e) {
-  $('#photo-dialog').modal({
-    onOpenEnd: function() {
-      $('#confirm-photo').off('click').on('click', function() {
-        if ($('#yes-photo').is(':checked')) {
-          mediaCaptureElement.click();
-        } else if ($('#no-photo').is(':checked')) {
-          downloadURL = '';
-          // TODO: FECHAR MODAL
-        }
-
-        $('#photo-dialog').modal('close');
-
-        // Após fechar a primeira caixa modal, abre a segunda caixa modal
-        $('#crime-dialog').modal({
-          onOpenEnd: function() {
-            // inicializa a caixa de seleção
-            $('select').formSelect();
-
-            // remove o evento de clique anterior antes de adicionar um novo
-            $('#add-marker-btn-dialog').off('click').on('click', function() {
-              var coord = e.latlng;
-              var lat = coord.lat;
-              var lng = coord.lng;
-              var urlStorage = downloadURL;
-
-              // gera um ID único com a data e hora atual para o documento
-              var now = new Date();
-              var id = $('#crime-select').val() + '-' + now.toISOString();
-
-              // adiciona as coordenadas e o ID ao firestore
-              addDoc(collection(db, "teste"), {
-                id: id,
-                lat: lat,
-                lng: lng,
-                urlStorage: urlStorage,
-                crime: $('#crime-select').val()
-              })
-              .then((docRef) => {
-                console.log("Coordenadas adicionadas com sucesso:", docRef.id);
-                $('#crime-dialog').modal('close');
-                urlStorage = '';
-              })
-              .catch((error) => {
-                console.error("Erro ao adicionar as coordenadas:", error);
-              });
-            });
-          }
-        }).modal('open');
+        $('#crime-dialog').modal('close');
       });
     }
   }).modal('open');
 });
 
+$('#add-clicked-location-marker-btn').click(function () {
+  map.on('click', function(e) {
+    var coord = e.latlng;
+    var lat = coord.lat;
+    var lng = coord.lng;
 
-//shortcuts for DOM elements
-var imageButtonElement = document.getElementById('submitImage');
-var mediaCaptureElement = document.getElementById('mediaCapture');
-var imageFormElement = document.getElementById('image-form');
+    $('#crime-dialog').modal({
+      onOpenEnd: function() {
+        // inicializa a caixa de seleção
+        $('select').formSelect();
 
-// Events for image upload.
-imageButtonElement.addEventListener('click', function(e) {
-  e.preventDefault();
-  mediaCaptureElement.click();
+        // remove o evento de clique anterior antes de adicionar um novo
+        $('#add-marker-btn-dialog').off('click').on('click', function() {
+          // gera um ID único com a data e hora atual para o documento
+          var now = new Date();
+          var id = $('#crime-select').val() + '-' + now.toISOString();
+
+          // adiciona as coordenadas e o ID ao firestore
+          addDoc(collection(db, "teste"), {
+            id: id,
+            lat: lat,
+            lng: lng,
+            crime: $('#crime-select').val()
+          })
+          .then((docRef) => {
+            console.log("Coordenadas adicionadas com sucesso:", docRef.id);
+            $('#crime-dialog').modal('close');
+          })
+          .catch((error) => {
+            console.error("Erro ao adicionar as coordenadas:", error);
+          });
+        });
+      }
+    }).modal('open');
+  });
 });
-mediaCaptureElement.addEventListener('change', onMediaFileSelected);
+// realiza uma consulta no firestore e retorna todos os documentos da coleção "teste"
+const querySnapshot = await getDocs(collection(db, "teste"));
+// Criar um LayerGroup para os marcadores
+const markersLayerGroup = L.layerGroup().addTo(map);
+
+
+// função que itera sobre o banco de dados e adiciona os marcadores ao mapa
+function busca_cords(iconSize) {
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data.lat && data.lng) {
+        const coords = new L.LatLng(data.lat, data.lng);
+        let iconName;
+
+        if (data.id.includes('MausTratos')) {
+            iconName = 'maustratos.png';
+        } else if (data.id.includes('Poluicao')) {
+            iconName = 'poluicao.png';
+        } else if (data.id.includes('Desmatamento')) {
+            iconName = 'desmatamento.png';
+        } else {
+            iconName = 'queimada.png';
+        }
+
+        const icon = L.icon({
+            iconUrl: `../img/${iconName}`,
+            iconSize: iconSize
+        });
+
+        const marker = L.marker(coords, { icon });
+        marker.bindPopup(doc.id);
+        markersLayerGroup.addLayer(marker); // Adicionar o marcador ao LayerGroup
+    }
+  });
+}
+
+
+busca_cords([100,100])
+
+map.on('zoomend', function() {
+  var currentZoom = map.getZoom();
+  var newIconSize;
+
+  // Ajustar o tamanho do ícone com base no nível de zoom
+  if (currentZoom <= 5) {
+    newIconSize = [40, 40]; 
+  } else if (currentZoom > 5 && currentZoom <= 7) {
+      newIconSize = [52, 52]; 
+  } else if (currentZoom > 7 && currentZoom <= 10) {
+      newIconSize = [65, 65]; 
+  } else if (currentZoom > 10 && currentZoom <= 12) {
+      newIconSize = [80, 80]; 
+  } else if (currentZoom > 12 && currentZoom <= 14) {
+      newIconSize = [100, 100]; 
+  } else if (currentZoom > 14 && currentZoom <= 16) {
+      newIconSize = [120, 120]; 
+  } else if (currentZoom > 16 && currentZoom <= 18) {
+      newIconSize = [140, 140]; 
+  } else {
+      newIconSize = [170, 170]; 
+  }
+
+  // Limpar todos os marcadores existentes
+  markersLayerGroup.clearLayers();
+  busca_cords(newIconSize)
+
+});
+
 
