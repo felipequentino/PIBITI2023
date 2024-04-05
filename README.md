@@ -1,8 +1,8 @@
 # MinhaAju - Crimes Ambientais (MACA)
-Repositório oficial da aplicação Foju.
+Repositório oficial da aplicação MACA.
 
 Essa aplicação é resultado de um projeto PIBITI, orientado pelo Prof. Dr. Hendrik T. Macedo e executado pelo discente João F. Quentino. Ambos da Universidade Federal de Sergipe (UFS)
-Você pode acessá-la aqui: https://felipequentino.github.io/
+Você pode acessá-la aqui: https://crimesambientais.netlify.app/
 
 ## O que é o MACA?
 Trata-se de um Progressive Web App Crowdsourcing, onde permite a interação do usuário com o mapa da cidade de Aracaju - SE, e exibe marcadores personalizados de crimes ambientais (desmatamento, queimadas, maus tratos aos animais, poluição, etc) na localização enviada pelo usuário, além do aplicativo possuir um mapa de calor com dados estatísticos acerca dos crimes ambientais ocorridos em Aracaju em 2022 - 2023 (em desenvolvimento).
